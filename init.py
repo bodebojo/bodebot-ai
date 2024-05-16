@@ -5,6 +5,7 @@ import psutil
 from dataclasses import dataclass
 from threading import Thread
 from time import sleep
+import random
 
 
 DEV_MODE = False
@@ -79,6 +80,7 @@ def init(client, ai):
             await message.reply(f"[{gpu_info}, {memory_info}]")
             return
         if message.author == client.user:
+            # Needed something here to compact in view lol
             return
         if message.content == "!reset":
             ai.set_system_prompt("")
@@ -103,6 +105,27 @@ def init(client, ai):
             print(f"Setting temperature to {character.temp}")
             ai.reset()
             await message.reply(f"Switched character to {character.display_name}.")
+            return
+        if message.content.startswith("!roll"):
+            dice = message.content.removeprefix("!roll ")
+
+            def roll_dice(start, stop):
+                return random.randrange(start, stop)
+
+            if dice == "d4":
+                await message.reply(f"<@{message.author.id}> rolled a d4 \n Result: {roll_dice(1,4)}")
+            elif dice == "d6":
+                await message.reply(f"<@{message.author.id}> rolled a d6 \n Result: {roll_dice(1,6)}")
+            elif dice == "d8":
+                await message.reply(f"<@{message.author.id}> rolled a d8 \n Result: {roll_dice(1,8)}")
+            elif dice == "d10":
+                await message.reply(f"<@{message.author.id}> rolled a d10 \n Result: {roll_dice(1,10)}")
+            elif dice == "d12":
+                await message.reply(f"<@{message.author.id}> rolled a d12 \n Result: {roll_dice(1,12)}")
+            elif dice == "d20":
+                await message.reply(f"<@{message.author.id}> rolled a d20 \n Result: {roll_dice(1,20)}")
+            elif dice == "d100":
+                await message.reply(f"<@{message.author.id}> rolled a d100 \n Result: {roll_dice(1,100)}")
             return
         if message.content.startswith("!"):
             await message.reply(f"Command not found.")
