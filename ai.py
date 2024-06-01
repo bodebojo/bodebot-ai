@@ -8,7 +8,7 @@ class Ai:
         # model_id = "orca-mini-3b-gguf2-q4_0.gguf"  # Small version of new model with novel dataset. Very fast responses; 4GB
         # model_id = "gpt4all-falcon-newbpe-q4_0.gguf"  # Very fast model with good quality. Fastest responses; 8GB
         # model_id = "orca-2-13b.Q4_0.gguf"  # Instruction Based. Model for work applications; 16GB
-        self.model = GPT4All(model_id, device='gpu')
+        self.model = GPT4All(model_id, device='cuda')
         self.system_prompt = system_prompt
         self.temp = temp
 
