@@ -2,6 +2,7 @@ import json
 import GPUtil
 import discord
 import psutil
+import datetime
 from dataclasses import dataclass
 from threading import Thread
 from time import sleep
@@ -54,6 +55,7 @@ def rfind_most_newlines(current_content: str) -> tuple[str, str]:
 
 
 generating = False
+current_date = datetime.date.today()
 
 
 def init(client, ai):
@@ -149,8 +151,10 @@ def init(client, ai):
             nonlocal done
             nonlocal response
             global generating
+            global current_date
 
-            generator = ai.generate(message.content, message.author)
+            print(current_date)
+            generator = ai.generate(message.content, message.author, current_date)
 
             for token in generator:
                 current_content += token
