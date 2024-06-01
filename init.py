@@ -145,7 +145,7 @@ def init(client, ai):
         #     message.content = message.content.removeprefix("<@1222171268766502983>")
         if generating:
             print(f"Denying; already generating (prompt={message.content})")
-            await message.reply("I am already generating a messages please, try again later.")
+            await message.reply("I am already generating a message, please try again later.")
             return
         generating = True
         response = await message.reply(initial_content)
