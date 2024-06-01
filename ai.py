@@ -36,12 +36,12 @@ class Ai:
     def generate(self, prompt: str, user: str, date: str):
         if self.system_prompt:
             prompt = (f'### System: {self.system_prompt}'
-                      f'### User: My name is {user}. Today is {date}. {prompt}.')
+                      f'### User: My name is {user}. Today is {date} (dont give away that information unless asked for it). {prompt}.')
         if self.temp is not None:
             temp = self.temp
         else:
             temp = 0.7
             prompt = (f'### System: {self.system_prompt}'
-                      f'### User: My name is {user}. Today is {date}. {prompt}.')
+                      f'### User: My name is {user}. Today is {date} (dont give away that information unless asked for it). {prompt}.')
         print(f"Generating {prompt=}")
         return self.model.generate(prompt=prompt, temp=temp, streaming=True, max_tokens=65536)

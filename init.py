@@ -2,7 +2,7 @@ import json
 import GPUtil
 import discord
 import psutil
-import datetime
+from datetime import date
 from dataclasses import dataclass
 from threading import Thread
 from time import sleep
@@ -55,7 +55,8 @@ def rfind_most_newlines(current_content: str) -> tuple[str, str]:
 
 
 generating = False
-current_date = datetime.date.today()
+current_date = date.today()
+current_date_formatted = current_date.strftime("%A %d %B %y")
 
 
 def init(client, ai):
@@ -144,7 +145,7 @@ def init(client, ai):
         #     message.content = message.content.removeprefix("<@1222171268766502983>")
         if generating:
             print(f"Denying; already generating (prompt={message.content})")
-            await message.reply("F u no gen")
+            await message.reply("I am already generating a messages please, try again later.")
             return
         generating = True
         response = await message.reply(initial_content)
@@ -157,10 +158,10 @@ def init(client, ai):
             nonlocal done
             nonlocal response
             global generating
-            global current_date
+            global current_date_formatted
 
             print(current_date)
-            generator = ai.generate(message.content, message.author, current_date)
+            generator = ai.generate(message.content, message.author.display_name, current_date_formatted)
 
             for token in generator:
                 current_content += token
