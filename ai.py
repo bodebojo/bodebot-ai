@@ -34,7 +34,7 @@ class Ai:
     def generate(self, prompt: str, user: str):
         if self.system_prompt:
             prompt = (f'### System: {self.system_prompt}'
-                      f'### User: My name is {user}. {prompt}')
+                      f'### User: My name is {user}. Its Pride Month. {prompt}')
         if self.temp is not None:
             temp = self.temp
         else:
