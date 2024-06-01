@@ -87,6 +87,12 @@ def init(client, ai):
         if message.content == "!reset":
             ai.set_system_prompt("")
             ai.reset()
+            for guild in client.guilds:
+                try:
+                    print(f"Setting nick to Bodebot AI for {guild}")
+                    await guild.get_member(client.user.id).edit(nick="Bodebot AI")
+                except discord.errors.Forbidden:
+                    print(f"ERROR: Failed to set nick in guild {guild}, skipping")
             await message.reply(f"{client.user} has been reset.")
             return
         if message.content.startswith("!character"):
