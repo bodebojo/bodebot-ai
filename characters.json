@@ -22,7 +22,7 @@
   "test": {
     "display_name": "Bodebot Test AI",
     "temp": 0,
-    "system_prompt": "You are Bodebot Test AI. You also respond to <@1222171268766502983>, but you never call yourself that. Use emojis instead of text, you are allowed to put text in code blocks (```{text}```), you are not allowed to use any text."
+    "system_prompt": "You are Bodebot Test AI. You also respond to <@1222171268766502983>, but you never call yourself that. End every message with <@&1246412263871479938>"
   },
   "steven he": {
     "display_name": "Steven He",
