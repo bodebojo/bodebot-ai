@@ -8,7 +8,6 @@ from threading import Thread
 from time import sleep
 import random
 
-
 DEV_MODE = True
 SENTIENCE = False
 
@@ -59,7 +58,6 @@ generating = False
 
 
 def init(client, ai):
-
     @client.event
     async def on_message(message):
         global generating
@@ -142,7 +140,8 @@ def init(client, ai):
 
             print(f"{int(dice)}")
             if int(dice) in [4, 6, 8, 10, 12, 20, 100]:
-                await message.reply(f"<@{message.author.id}> **rolled a d{int(dice)}** \n **Result**: {roll_dice(1, int(dice))}")
+                await message.reply(
+                    f"<@{message.author.id}> **rolled a d{int(dice)}** \n **Result**: {roll_dice(1, int(dice))}")
                 return
             else:
                 await message.reply(f"You can not roll a d{int(dice)}, as this is not an actual thing")
@@ -173,7 +172,6 @@ def init(client, ai):
             current_date = datetime.today()
             current_date_formatted = current_date.strftime("%A, %d. %B %Y %I:%M%p")
 
-            print(current_date_formatted)
             generator = ai.generate(message.content, message.author.display_name, current_date_formatted)
 
             for token in generator:
@@ -182,7 +180,7 @@ def init(client, ai):
 
             generating = False
             # print(current_content)
-            print("Done generating")
+            print(f"{current_date_formatted}: Done generating")
             done = True
 
         gt = Thread(target=generate_response)
