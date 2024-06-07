@@ -8,7 +8,7 @@ from threading import Thread
 from time import sleep
 import random
 
-DEV_MODE = True
+DEV_MODE = False
 SENTIENCE = False
 
 
