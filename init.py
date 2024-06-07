@@ -2,14 +2,15 @@ import json
 import GPUtil
 import discord
 import psutil
-from datetime import date
+from datetime import datetime
 from dataclasses import dataclass
 from threading import Thread
 from time import sleep
 import random
 
 
-DEV_MODE = False
+DEV_MODE = True
+SENTIENCE = False
 
 
 @dataclass
@@ -55,12 +56,9 @@ def rfind_most_newlines(current_content: str) -> tuple[str, str]:
 
 
 generating = False
-current_date = date.today()
-current_date_formatted = current_date.strftime("%A %d %B %y")
 
 
 def init(client, ai):
-    characters = get_characters()
 
     @client.event
     async def on_message(message):
@@ -96,7 +94,8 @@ def init(client, ai):
                     print(f"ERROR: Failed to set nick in guild {guild}, skipping")
             await message.reply(f"{client.user} has been reset.")
             return
-        if message.content.startswith("!character"):
+        if message.content.startswith(f"!character"):
+            characters = get_characters()
             character = message.content.removeprefix("!character ")
             if character not in characters:
                 await message.reply(f"{character} does not exist.\n"
@@ -115,27 +114,39 @@ def init(client, ai):
             ai.reset()
             await message.reply(f"Switched character to {character.display_name}.")
             return
+        if message.content.startswith(f"!char"):
+            characters = get_characters()
+            character = message.content.removeprefix("!char ")
+            if character not in characters:
+                await message.reply(f"{character} does not exist.\n"
+                                    f"Available characters: {', '.join(characters)}")
+                return
+            character = characters[character]
+            for guild in client.guilds:
+                try:
+                    print(f"Setting nick to {character.display_name} for {guild}")
+                    await guild.get_member(client.user.id).edit(nick=character.display_name)
+                except discord.errors.Forbidden:
+                    print(f"ERROR: Failed to set nick in guild {guild}, skipping")
+            ai.set_system_prompt(character.system_prompt)
+            ai.set_temp(character.temp)
+            print(f"Setting temperature to {character.temp}")
+            ai.reset()
+            await message.reply(f"Switched character to {character.display_name}.")
+            return
         if message.content.startswith("!roll"):
-            dice = message.content.removeprefix("!roll ")
+            dice = message.content.removeprefix("!roll d")
 
             def roll_dice(start, stop):
                 return random.randrange(start, stop)
 
-            if dice == "d4":
-                await message.reply(f"<@{message.author.id}> **rolled a d4** \n **Result**: {roll_dice(1,4)}")
-            elif dice == "d6":
-                await message.reply(f"<@{message.author.id}> **rolled a d6** \n **Result**: {roll_dice(1,6)}")
-            elif dice == "d8":
-                await message.reply(f"<@{message.author.id}> **rolled a d8** \n **Result**: {roll_dice(1,8)}")
-            elif dice == "d10":
-                await message.reply(f"<@{message.author.id}> **rolled a d10** \n **Result**: {roll_dice(1,10)}")
-            elif dice == "d12":
-                await message.reply(f"<@{message.author.id}> **rolled a d12** \n **Result**: {roll_dice(1,12)}")
-            elif dice == "d20":
-                await message.reply(f"<@{message.author.id}> **rolled a d20** \n **Result**: {roll_dice(1,20)}")
-            elif dice == "d100":
-                await message.reply(f"<@{message.author.id}> **rolled a d100** \n **Result**: {roll_dice(1,100)}")
-            return
+            print(f"{int(dice)}")
+            if int(dice) in [4, 6, 8, 10, 12, 20, 100]:
+                await message.reply(f"<@{message.author.id}> **rolled a d{int(dice)}** \n **Result**: {roll_dice(1, int(dice))}")
+                return
+            else:
+                await message.reply(f"You can not roll a d{int(dice)}, as this is not an actual thing")
+                return
         if message.content.startswith("!"):
             await message.reply(f"Command not found.")
             return
@@ -158,9 +169,11 @@ def init(client, ai):
             nonlocal done
             nonlocal response
             global generating
-            global current_date_formatted
 
-            print(current_date)
+            current_date = datetime.today()
+            current_date_formatted = current_date.strftime("%A, %d. %B %Y %I:%M%p")
+
+            print(current_date_formatted)
             generator = ai.generate(message.content, message.author.display_name, current_date_formatted)
 
             for token in generator:
