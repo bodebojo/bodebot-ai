@@ -8,6 +8,10 @@ class Ai:
         # model_id = "orca-mini-3b-gguf2-q4_0.gguf"  # Small version of new model with novel dataset. Very fast responses; 4GB
         # model_id = "gpt4all-falcon-newbpe-q4_0.gguf"  # Very fast model with good quality. Fastest responses; 8GB
         # model_id = "orca-2-13b.Q4_0.gguf"  # Instruction Based. Model for work applications; 16GB
+        # model_id = "ghost-7b-v0.9.1-Q4_0.gguf"  # taiwan orso
+        # model_id = "gpt4all-13b-snoozy-q4_0.gguf"
+        # model_id = "Phi-3-mini-4k-instruct.Q4_0.gguf"  # Nope
+        # model_id = "Meta-Llama-3-8B-Instruct.Q4_0.gguf"  # Nope
         self.model = GPT4All(model_id, device='cuda')
         self.system_prompt = system_prompt
         self.temp = temp
@@ -43,5 +47,5 @@ class Ai:
             temp = 0.7
             prompt = (f'### System: {self.system_prompt}'
                       f'### User: My name is {user}. Today is {date} (dont give away that information unless asked for it). {prompt}.')
-        print(f"Generating {prompt=}")
+        # print(f"Generating {prompt=}")
         return self.model.generate(prompt=prompt, temp=temp, streaming=True, max_tokens=65536)
