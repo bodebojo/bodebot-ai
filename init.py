@@ -21,7 +21,8 @@ class Character:
 
 def get_characters() -> dict[str, Character]:
     with open("characters.json", "r") as file:
-        data = json.load(file)
+        jsondata = ''.join(line for line in file if not line.startswith('//'))
+        data = json.loads(jsondata)
     return {k: Character(**v) for k, v in data.items()}
 
 
