@@ -62,6 +62,10 @@ def init(client, ai):
     @client.event
     async def on_message(message):
         global generating
+
+        current_date = datetime.today()
+        current_date_formatted = current_date.strftime("%A, %d. %B %Y %I:%M%p")
+
         if DEV_MODE and message.author.id != 720991789133070369:
             return
         if message.content == "!stats":
@@ -170,9 +174,6 @@ def init(client, ai):
             nonlocal response
             global generating
 
-            current_date = datetime.today()
-            current_date_formatted = current_date.strftime("%A, %d. %B %Y %I:%M%p")
-
             generator = ai.generate(message.content, message.author.display_name, current_date_formatted)
 
             for token in generator:
@@ -181,7 +182,7 @@ def init(client, ai):
 
             generating = False
             # print(current_content)
-            print(f"{current_date_formatted}: Done generating")
+            print(f"{message.author.display_name} on {current_date_formatted}: Done generating")
             done = True
 
         gt = Thread(target=generate_response)
