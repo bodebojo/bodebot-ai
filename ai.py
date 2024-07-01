@@ -12,12 +12,12 @@ class Ai:
         # model_id = "ghost-7b-v0.9.1-Q4_0.gguf"  # taiwan orso
         # model_id = "gpt4all-13b-snoozy-q4_0.gguf"
         # model_id = "Lexi-Llama-3-8B-Uncensored-Q6_K.gguf"  # Uncensored but breaks ALOT
-        model_id = "Lexi-Llama-3-8B-Uncensored-Q5_K_S.gguf"  # Uncensored but annoying template unstable with breaking
+        model_id = "Lexi-Llama-3-8B-Uncensored-Q5_K_S.gguf"  # Uncensored but annoying, template unstable with breaking
         # model_id = "lostmagic-rp_7b.Q4_K_M.gguf"  # Breaking
         # model_id = "Prima-LelantaclesV6-7b-Q4_K_S-imatrix.gguf"  # Doesnt roleplay
         # model_id = "13b-ouroboros.Q4_K_S.gguf"  # No Roleplaying
 
-        self.model = GPT4All(model_id, device='cuda', n_ctx=4096, allow_download=False, model_path=Path.cwd() / 'models')
+        self.model = GPT4All(model_id, device='cuda', n_ctx=32768, allow_download=False, model_path=Path.cwd() / 'models')
         self.system_prompt = system_prompt
         self.temp = temp
 
